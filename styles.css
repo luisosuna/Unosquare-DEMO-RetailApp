@@ -15,11 +15,11 @@ body {
 /* Screen management */
 .screen {
     display: none;
-    position: fixed;
+    position: relative;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: auto;
     z-index: 1;
 }
 
@@ -28,7 +28,7 @@ body {
 }
 
 #main-screen.active {
-    position: fixed;
+    position: relative; /* Change from fixed to relative */
     z-index: 2;
 }
 
@@ -340,8 +340,7 @@ body {
 }
 
 .inventory-header h2 {
-    color: #333;
-    font-size: 2rem;
+    color: #d3d3d3; /* Light grey */
 }
 
 .product-sort select {
@@ -470,8 +469,7 @@ body {
 }
 
 .cart-header h2 {
-    color: #333;
-    font-size: 2rem;
+    color: #d3d3d3; /* Light grey */
 }
 
 .cart-items {
@@ -604,8 +602,7 @@ body {
 .checkout-header h2,
 .summary-header h2,
 .complete-header h2 {
-    color: #333;
-    font-size: 2rem;
+    color: #d3d3d3; /* Light grey */
 }
 
 .checkout-form {
@@ -615,6 +612,11 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     max-width: 600px;
     margin: 0 auto; /* Center the form */
+}
+
+.checkout-content,
+.summary-content {
+    color: #333; /* Dark grey for text inside the container */
 }
 
 .form-section {
