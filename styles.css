@@ -22,7 +22,7 @@ body {
 }
 
 /* Login Screen */
-#login-screen {
+#login-screen.active {
     min-height: 100vh;
     display: flex;
     align-items: center;
