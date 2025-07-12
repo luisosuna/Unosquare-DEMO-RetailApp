@@ -173,10 +173,10 @@ function initializeEventListeners() {
 
 // User management
 const validUsers = [
-    { username: 'unosquare_validUser', password: 'secret_sauce', type: 'standard' },
-    { username: 'unosquare_problemUser', password: 'secret_sauce', type: 'problem' },
-    { username: 'unosquare_performanceUser', password: 'secret_sauce', type: 'performance' },
-    { username: 'unosquare_errorUser', password: 'secret_sauce', type: 'error' }
+    { username: 'unosquare_validUser', password: 'secret_uno', type: 'standard' },
+    { username: 'unosquare_problemUser', password: 'secret_uno', type: 'problem' },
+    { username: 'unosquare_performanceUser', password: 'secret_uno', type: 'performance' },
+    { username: 'unosquare_errorUser', password: 'secret_uno', type: 'error' }
 ];
 
 function handleLogin(e) {
