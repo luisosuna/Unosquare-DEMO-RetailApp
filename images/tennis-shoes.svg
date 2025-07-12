@@ -1,0 +1,6 @@
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="200" fill="#2196F3"/>
+  <ellipse cx="150" cy="120" rx="80" ry="35" fill="white" stroke="#333" stroke-width="2"/>
+  <ellipse cx="150" cy="120" rx="60" ry="25" fill="none" stroke="#333" stroke-width="1"/>
+  <text x="150" y="180" text-anchor="middle" font-family="Arial" font-size="16" fill="white">Tennis Shoes</text>
+</svg>

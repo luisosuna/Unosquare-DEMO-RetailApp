@@ -1,0 +1,6 @@
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="200" fill="#9C27B0"/>
+  <path d="M150 40 L120 80 L120 140 L180 140 L180 80 Z" fill="white" stroke="#333" stroke-width="3"/>
+  <rect x="145" y="140" width="10" height="50" fill="white"/>
+  <text x="150" y="190" text-anchor="middle" font-family="Arial" font-size="16" fill="white">Paddle Racket</text>
+</svg>
