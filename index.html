@@ -31,6 +31,7 @@
                     <input type="password" id="password" name="password" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Login</button>
+                <button type="button" id="guest-checkout-btn" class="btn btn-secondary">Continue as Guest</button>
                 <div class="accepted-usernames">
                     <h4>Accepted usernames are:</h4>
                     <p>unosquare_validUser<br>
@@ -140,6 +141,11 @@
                 <form id="checkout-form" class="checkout-form">
                     <div class="form-section">
                         <h3>Personal Information</h3>
+                        <div class="form-group" id="email-group" style="display: none;">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email">
+                            <small>Required for guest checkout</small>
+                        </div>
                         <div class="form-group">
                             <label for="first-name">First Name:</label>
                             <input type="text" id="first-name" name="firstName" required>

@@ -1,0 +1,8 @@
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="200" fill="#FF5722"/>
+  <path d="M50 80 Q150 60 250 80 Q250 120 50 120 Z" fill="white" stroke="#333" stroke-width="2"/>
+  <line x1="80" y1="90" x2="220" y2="90" stroke="#333" stroke-width="1"/>
+  <line x1="80" y1="100" x2="220" y2="100" stroke="#333" stroke-width="1"/>
+  <line x1="80" y1="110" x2="220" y2="110" stroke="#333" stroke-width="1"/>
+  <text x="150" y="180" text-anchor="middle" font-family="Arial" font-size="16" fill="white">Tennis Strings</text>
+</svg>

@@ -1,0 +1,9 @@
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="200" fill="#009688"/>
+  <ellipse cx="150" cy="110" rx="70" ry="28" fill="white" stroke="#333" stroke-width="2"/>
+  <ellipse cx="150" cy="110" rx="50" ry="18" fill="none" stroke="#333" stroke-width="1"/>
+  <circle cx="130" cy="100" r="2" fill="#333"/>
+  <circle cx="150" cy="100" r="2" fill="#333"/>
+  <circle cx="170" cy="100" r="2" fill="#333"/>
+  <text x="150" y="180" text-anchor="middle" font-family="Arial" font-size="14" fill="white">Pickleball Shoes</text>
+</svg>

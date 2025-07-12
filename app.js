@@ -1,5 +1,6 @@
 // Application state
 let currentUser = null;
+let isGuestUser = false;
 let cart = [];
 let products = [];
 let filteredProducts = [];
@@ -12,8 +13,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Check if user is already logged in
     const savedUser = localStorage.getItem('currentUser');
+    const savedIsGuest = localStorage.getItem('isGuestUser');
     if (savedUser) {
         currentUser = JSON.parse(savedUser);
+        isGuestUser = savedIsGuest === 'true';
         showMainScreen();
     } else {
         showLoginScreen();
@@ -30,7 +33,7 @@ function initializeProducts() {
             category: "tennis",
             price: 149.99,
             description: "High-quality carbon fiber tennis racket for professional players. Perfect balance and control.",
-            image: "https://via.placeholder.com/300x200/4CAF50/FFFFFF?text=Tennis+Racket"
+            image: "images/tennis-racket.svg"
         },
         {
             id: 2,
@@ -38,7 +41,7 @@ function initializeProducts() {
             category: "tennis",
             price: 12.99,
             description: "Premium tennis balls for tournament play. Excellent bounce and durability.",
-            image: "https://via.placeholder.com/300x200/FFC107/FFFFFF?text=Tennis+Balls"
+            image: "images/tennis-balls.svg"
         },
         {
             id: 3,
@@ -46,7 +49,7 @@ function initializeProducts() {
             category: "tennis",
             price: 89.99,
             description: "Professional tennis shoes with excellent grip and ankle support.",
-            image: "https://via.placeholder.com/300x200/2196F3/FFFFFF?text=Tennis+Shoes"
+            image: "images/tennis-shoes.svg"
         },
         {
             id: 4,
@@ -54,7 +57,7 @@ function initializeProducts() {
             category: "tennis",
             price: 24.99,
             description: "High-performance tennis strings for enhanced power and control.",
-            image: "https://via.placeholder.com/300x200/FF5722/FFFFFF?text=Tennis+Strings"
+            image: "images/tennis-strings.svg"
         },
         
         // Paddle Equipment
@@ -64,7 +67,7 @@ function initializeProducts() {
             category: "paddle",
             price: 199.99,
             description: "Professional carbon fiber paddle racket with diamond shape for power players.",
-            image: "https://via.placeholder.com/300x200/9C27B0/FFFFFF?text=Paddle+Racket"
+            image: "images/paddle-racket.svg"
         },
         {
             id: 6,
@@ -72,7 +75,7 @@ function initializeProducts() {
             category: "paddle",
             price: 18.99,
             description: "Official paddle balls with optimal pressure and bounce characteristics.",
-            image: "https://via.placeholder.com/300x200/E91E63/FFFFFF?text=Paddle+Balls"
+            image: "images/paddle-balls.svg"
         },
         {
             id: 7,
@@ -80,7 +83,7 @@ function initializeProducts() {
             category: "paddle",
             price: 119.99,
             description: "Specialized paddle shoes with lateral support and non-marking soles.",
-            image: "https://via.placeholder.com/300x200/3F51B5/FFFFFF?text=Paddle+Shoes"
+            image: "images/paddle-shoes.svg"
         },
         {
             id: 8,
@@ -88,7 +91,7 @@ function initializeProducts() {
             category: "paddle",
             price: 79.99,
             description: "Professional paddle bag with multiple compartments and thermal protection.",
-            image: "https://via.placeholder.com/300x200/795548/FFFFFF?text=Paddle+Bag"
+            image: "images/paddle-bag.svg"
         },
         
         // Pickleball Equipment
@@ -98,7 +101,7 @@ function initializeProducts() {
             category: "pickleball",
             price: 89.99,
             description: "Complete pickleball paddle set for beginners and intermediate players.",
-            image: "https://via.placeholder.com/300x200/4CAF50/FFFFFF?text=Pickleball+Paddle"
+            image: "images/pickleball-paddle.svg"
         },
         {
             id: 10,
@@ -106,7 +109,7 @@ function initializeProducts() {
             category: "pickleball",
             price: 15.99,
             description: "Tournament-grade pickleball balls with optimal holes and durability.",
-            image: "https://via.placeholder.com/300x200/FF9800/FFFFFF?text=Pickleball+Balls"
+            image: "images/pickleball-balls.svg"
         },
         {
             id: 11,
@@ -114,7 +117,7 @@ function initializeProducts() {
             category: "pickleball",
             price: 159.99,
             description: "Portable pickleball net system, easy setup for any court surface.",
-            image: "https://via.placeholder.com/300x200/607D8B/FFFFFF?text=Pickleball+Net"
+            image: "images/pickleball-net.svg"
         },
         {
             id: 12,
@@ -122,7 +125,7 @@ function initializeProducts() {
             category: "pickleball",
             price: 99.99,
             description: "Lightweight pickleball shoes with superior court grip and comfort.",
-            image: "https://via.placeholder.com/300x200/009688/FFFFFF?text=Pickleball+Shoes"
+            image: "images/pickleball-shoes.svg"
         }
     ];
     
@@ -133,6 +136,7 @@ function initializeProducts() {
 function initializeEventListeners() {
     // Login form
     document.getElementById('login-form').addEventListener('submit', handleLogin);
+    document.getElementById('guest-checkout-btn').addEventListener('click', handleGuestCheckout);
     
     // Navigation
     document.getElementById('menu-btn').addEventListener('click', toggleSideMenu);
@@ -196,9 +200,19 @@ function handleLogin(e) {
     }
 }
 
+function handleGuestCheckout() {
+    currentUser = { username: 'guest', type: 'guest' };
+    isGuestUser = true;
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    localStorage.setItem('isGuestUser', 'true');
+    showMainScreen();
+}
+
 function handleLogout() {
     currentUser = null;
+    isGuestUser = false;
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('isGuestUser');
     cart = [];
     localStorage.removeItem('cart');
     updateCartCount();
@@ -247,6 +261,17 @@ function showCheckoutPage() {
     
     hideAllPages();
     document.getElementById('checkout-page').classList.add('active');
+    
+    // Show email field for guest users
+    const emailGroup = document.getElementById('email-group');
+    const emailInput = document.getElementById('email');
+    if (isGuestUser) {
+        emailGroup.style.display = 'block';
+        emailInput.required = true;
+    } else {
+        emailGroup.style.display = 'none';
+        emailInput.required = false;
+    }
 }
 
 function showOrderSummaryPage() {
@@ -460,6 +485,11 @@ function handleCheckoutSubmit(e) {
         cvv: formData.get('cvv')
     };
     
+    // Add email for guest users
+    if (isGuestUser) {
+        checkoutData.email = formData.get('email');
+    }
+    
     // Validate form
     if (!validateCheckoutForm(checkoutData)) {
         return;
@@ -472,6 +502,15 @@ function handleCheckoutSubmit(e) {
 }
 
 function validateCheckoutForm(data) {
+    // Validate email for guest users
+    if (isGuestUser && data.email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(data.email)) {
+            showError('Please enter a valid email address');
+            return false;
+        }
+    }
+    
     // Validate zip code (US format)
     const zipRegex = /^[0-9]{5}(-[0-9]{4})?$/;
     if (!zipRegex.test(data.zipCode)) {
@@ -535,10 +574,17 @@ function renderOrderSummary() {
     
     // Render shipping info
     const shippingContainer = document.getElementById('summary-shipping');
-    shippingContainer.innerHTML = `
+    let shippingInfo = `
         <p><strong>Name:</strong> ${checkoutData.firstName} ${checkoutData.lastName}</p>
         <p><strong>Zip Code:</strong> ${checkoutData.zipCode}</p>
     `;
+    
+    // Add email for guest users
+    if (isGuestUser && checkoutData.email) {
+        shippingInfo += `<p><strong>Email:</strong> ${checkoutData.email}</p>`;
+    }
+    
+    shippingContainer.innerHTML = shippingInfo;
     
     // Calculate totals
     const subtotal = getCartTotal();

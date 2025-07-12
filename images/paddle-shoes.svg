@@ -1,0 +1,8 @@
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="200" fill="#3F51B5"/>
+  <ellipse cx="150" cy="110" rx="75" ry="30" fill="white" stroke="#333" stroke-width="2"/>
+  <ellipse cx="150" cy="110" rx="55" ry="20" fill="none" stroke="#333" stroke-width="1"/>
+  <circle cx="130" cy="100" r="3" fill="#333"/>
+  <circle cx="170" cy="100" r="3" fill="#333"/>
+  <text x="150" y="180" text-anchor="middle" font-family="Arial" font-size="16" fill="white">Paddle Shoes</text>
+</svg>
