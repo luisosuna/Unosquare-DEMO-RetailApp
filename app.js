@@ -126,6 +126,14 @@ function initializeProducts() {
             price: 99.99,
             description: "Lightweight pickleball shoes with superior court grip and comfort.",
             image: "images/pickleball-shoes.svg"
+        },
+        {
+            id: 13,
+            name: "Defective Pickleball Set (CLEARANCE)",
+            category: "pickleball",
+            price: -25.00,
+            description: "Defective pickleball set - store credit will be applied for this item.",
+            image: "images/pickleball-balls.svg"
         }
     ];
     
@@ -169,6 +177,8 @@ function initializeEventListeners() {
             const page = e.target.getAttribute('data-page');
             if (page === 'inventory') {
                 showInventoryPage();
+            } else if (page === 'about') {
+                showAboutPage();
             }
             closeSideMenu();
         });
@@ -178,9 +188,7 @@ function initializeEventListeners() {
 // User management
 const validUsers = [
     { username: 'unosquare_validUser', password: 'secret_uno', type: 'standard' },
-    { username: 'unosquare_problemUser', password: 'secret_uno', type: 'problem' },
-    { username: 'unosquare_performanceUser', password: 'secret_uno', type: 'performance' },
-    { username: 'unosquare_errorUser', password: 'secret_uno', type: 'error' }
+    { username: 'unosquare_performanceUser', password: 'secret_uno', type: 'performance' }
 ];
 
 function handleLogin(e) {
@@ -188,6 +196,12 @@ function handleLogin(e) {
     
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+    
+    // Special handling for removed users
+    if (username === 'unosquare_errorUser' && password === 'secret_uno') {
+        showError('This user has a problem, epic sad face');
+        return;
+    }
     
     const user = validUsers.find(u => u.username === username && u.password === password);
     
@@ -247,6 +261,11 @@ function showInventoryPage() {
     renderProducts();
 }
 
+function showAboutPage() {
+    hideAllPages();
+    document.getElementById('about-page').classList.add('active');
+}
+
 function showCartPage() {
     hideAllPages();
     document.getElementById('cart-page').classList.add('active');
@@ -256,6 +275,13 @@ function showCartPage() {
 function showCheckoutPage() {
     if (cart.length === 0) {
         showError('You cannot checkout without items in your cart!');
+        return;
+    }
+    
+    // Check for negative total
+    const total = getCartTotal();
+    if (total < 0) {
+        showError('Cannot proceed to checkout with negative amounts. Please remove items with negative values or add more items to your cart.');
         return;
     }
     
@@ -271,6 +297,29 @@ function showCheckoutPage() {
     } else {
         emailGroup.style.display = 'none';
         emailInput.required = false;
+    }
+    
+    // Hide First Name and Last Name for unosquare_validUser
+    const firstNameGroup = document.getElementById('first-name').closest('.form-group');
+    const lastNameGroup = document.getElementById('last-name').closest('.form-group');
+    const firstNameInput = document.getElementById('first-name');
+    const lastNameInput = document.getElementById('last-name');
+    
+    if (currentUser && currentUser.username === 'unosquare_validUser') {
+        firstNameGroup.style.display = 'none';
+        lastNameGroup.style.display = 'none';
+        firstNameInput.required = false;
+        lastNameInput.required = false;
+        // Set default values
+        firstNameInput.value = 'Valid';
+        lastNameInput.value = 'User';
+    } else {
+        firstNameGroup.style.display = 'block';
+        lastNameGroup.style.display = 'block';
+        firstNameInput.required = true;
+        lastNameInput.required = true;
+        firstNameInput.value = '';
+        lastNameInput.value = '';
     }
 }
 
@@ -379,9 +428,19 @@ function updateCartCount() {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     document.getElementById('cart-count').textContent = totalItems;
     
-    // Enable/disable checkout button
+    // Enable/disable checkout button based on cart content and total
     const checkoutBtn = document.getElementById('checkout-btn');
-    checkoutBtn.disabled = cart.length === 0;
+    const total = getCartTotal();
+    checkoutBtn.disabled = cart.length === 0 || total < 0;
+    
+    // Update button text if total is negative
+    if (total < 0) {
+        checkoutBtn.textContent = 'Cannot Checkout (Negative Total)';
+        checkoutBtn.style.backgroundColor = '#ccc';
+    } else {
+        checkoutBtn.textContent = 'Checkout';
+        checkoutBtn.style.backgroundColor = '';
+    }
 }
 
 function getCartTotal() {
@@ -414,21 +473,31 @@ function renderCart() {
             </div>
         `;
     } else {
-        container.innerHTML = cart.map(item => `
-            <div class="cart-item">
-                <div class="cart-item-details">
-                    <div class="cart-item-name">${item.name}</div>
-                    <div class="cart-item-desc">${item.description}</div>
-                </div>
-                <div class="cart-item-price">$${item.price.toFixed(2)}</div>
-                <div class="quantity-controls">
-                    <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
-                    <span class="quantity">${item.quantity}</span>
-                    <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
-                </div>
-                <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        container.innerHTML = `
+            <div class="cart-summary">
+                <h3>Items in bag: ${totalItems}</h3>
             </div>
-        `).join('');
+            ${cart.map(item => {
+                const itemSubtotal = item.price * item.quantity;
+                return `
+                    <div class="cart-item">
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-desc">${item.description}</div>
+                            <div class="cart-item-subtotal">Subtotal: $${itemSubtotal.toFixed(2)}</div>
+                        </div>
+                        <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                            <span class="quantity">${item.quantity}</span>
+                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                        </div>
+                        <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
+                    </div>
+                `;
+            }).join('')}
+        `;
     }
     
     totalElement.textContent = getCartTotal().toFixed(2);

@@ -15,10 +15,21 @@ body {
 /* Screen management */
 .screen {
     display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
 }
 
 .screen.active {
     display: block;
+}
+
+#main-screen.active {
+    position: relative;
+    z-index: 2;
 }
 
 /* Login Screen */
@@ -52,6 +63,13 @@ body {
 .logo-container h1 {
     color: #333;
     font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.quality-text {
+    color: #666;
+    font-size: 1rem;
+    font-style: italic;
     margin-bottom: 1rem;
 }
 
@@ -106,12 +124,12 @@ body {
 }
 
 .btn-primary {
-    background-color: #667eea;
+    background-color: #001f3f; /* Dark blue */
     color: white;
 }
 
 .btn-primary:hover {
-    background-color: #5a6fd8;
+    background-color: #000000; /* Black */
 }
 
 .btn-secondary {
@@ -120,16 +138,16 @@ body {
 }
 
 .btn-secondary:hover {
-    background-color: #545b62;
+    background-color: #000000; /* Black */
 }
 
 .btn-success {
-    background-color: #28a745;
+    background-color: #ff4500; /* Orange */
     color: white;
 }
 
 .btn-success:hover {
-    background-color: #218838;
+    background-color: #ff0000; /* Red */
 }
 
 .btn:disabled {
@@ -164,7 +182,7 @@ body {
 
 /* Header */
 .header {
-    background-color: #3f51b5;
+    background-color: #001f3f; /* Dark blue */
     color: white;
     padding: 1rem 2rem;
     display: flex;
@@ -220,7 +238,7 @@ body {
     position: absolute;
     top: -5px;
     right: -5px;
-    background-color: #ff4444;
+    background-color: #ff0000; /* Red */
     color: white;
     border-radius: 50%;
     width: 20px;
@@ -253,7 +271,7 @@ body {
     left: -300px;
     width: 300px;
     height: 100vh;
-    background-color: #3f51b5;
+    background-color: #001f3f; /* Dark blue */
     z-index: 1000;
     transition: left 0.3s;
     padding: 2rem 1rem;
@@ -402,13 +420,13 @@ body {
 .inventory-item-price {
     font-size: 1.3rem;
     font-weight: 700;
-    color: #3f51b5;
+    color: #001f3f; /* Dark blue */
     margin-bottom: 1rem;
 }
 
 .add-to-cart-btn {
     width: 100%;
-    background-color: #3f51b5;
+    background-color: #001f3f; /* Dark blue */
     color: white;
     border: none;
     padding: 0.75rem;
@@ -419,11 +437,11 @@ body {
 }
 
 .add-to-cart-btn:hover {
-    background-color: #303f9f;
+    background-color: #000000; /* Black */
 }
 
 .remove-btn {
-    background-color: #dc3545;
+    background-color: #ff0000; /* Red */
     color: white;
     border: none;
     padding: 0.5rem 1rem;
@@ -433,7 +451,7 @@ body {
 }
 
 .remove-btn:hover {
-    background-color: #c82333;
+    background-color: #000000; /* Black */
 }
 
 /* Cart Page */
@@ -456,6 +474,19 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
+}
+
+.cart-summary {
+    padding: 1rem 1.5rem;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #eee;
+    font-weight: 600;
+    color: #001f3f;
+}
+
+.cart-summary h3 {
+    margin: 0;
+    font-size: 1.2rem;
 }
 
 .cart-item {
@@ -484,12 +515,19 @@ body {
 .cart-item-desc {
     color: #666;
     font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.cart-item-subtotal {
+    color: #001f3f;
+    font-weight: 600;
+    font-size: 0.95rem;
 }
 
 .cart-item-price {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #3f51b5;
+    color: #001f3f; /* Dark blue */
     margin-right: 1rem;
 }
 
@@ -571,6 +609,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     max-width: 600px;
+    margin: 0 auto; /* Center the form */
 }
 
 .form-section {
@@ -648,7 +687,7 @@ body {
     font-size: 1.3rem;
     margin-top: 0.5rem;
     padding-top: 0.5rem;
-    border-top: 2px solid #3f51b5;
+    border-top: 2px solid #001f3f; /* Dark blue */
 }
 
 /* Order Complete */
@@ -658,7 +697,7 @@ body {
 
 .complete-icon {
     font-size: 4rem;
-    color: #28a745;
+    color: #ff4500; /* Orange */
     margin: 1rem 0;
 }
 
@@ -674,6 +713,32 @@ body {
     font-size: 1.1rem;
     margin-bottom: 1rem;
     color: #555;
+}
+
+/* About Page */
+.about-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #eee;
+}
+
+.about-header h2 {
+    color: #333;
+    font-size: 2rem;
+}
+
+.about-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    line-height: 1.8;
+}
+
+.about-content p {
+    color: #555;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
 }
 
 /* Error messages */
