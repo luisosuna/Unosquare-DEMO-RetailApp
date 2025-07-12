@@ -187,8 +187,7 @@ function initializeEventListeners() {
 
 // User management
 const validUsers = [
-    { username: 'unosquare_validUser', password: 'secret_uno', type: 'standard' },
-    { username: 'unosquare_performanceUser', password: 'secret_uno', type: 'performance' }
+    { username: 'unosquare_validUser', password: 'secret_uno', type: 'standard' }
 ];
 
 function handleLogin(e) {
@@ -199,7 +198,17 @@ function handleLogin(e) {
     
     // Special handling for removed users
     if (username === 'unosquare_errorUser' && password === 'secret_uno') {
-        showError('This user has a problem, epic sad face');
+        showError('Epic Error, not sure what happened');
+        return;
+    }
+    
+    // Special handling for performance user - 10 second delay
+    if (username === 'unosquare_performanceUser' && password === 'secret_uno') {
+        showLoadingState();
+        setTimeout(() => {
+            hideLoadingState();
+            showError('Too slow');
+        }, 10000);
         return;
     }
     
@@ -253,6 +262,28 @@ function showMainScreen() {
     document.getElementById('main-screen').classList.add('active');
     showInventoryPage();
     renderProducts();
+}
+
+function showLoadingState() {
+    // Create loading overlay
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.id = 'loading-overlay';
+    loadingOverlay.className = 'loading-overlay';
+    loadingOverlay.innerHTML = `
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3>Loading...</h3>
+            <p>Please wait while we process your request</p>
+        </div>
+    `;
+    document.body.appendChild(loadingOverlay);
+}
+
+function hideLoadingState() {
+    const loadingOverlay = document.getElementById('loading-overlay');
+    if (loadingOverlay) {
+        loadingOverlay.remove();
+    }
 }
 
 function showInventoryPage() {
@@ -683,7 +714,7 @@ function showError(message) {
     
     // Create new error message
     const errorDiv = document.createElement('div');
-    errorDiv.className = 'error-message';
+    errorDiv.className = 'error-message error-banner';
     errorDiv.textContent = message;
     
     // Find the appropriate container to insert the error
