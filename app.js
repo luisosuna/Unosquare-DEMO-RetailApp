@@ -428,17 +428,8 @@ function addToCart(productId) {
         cart.push({ ...product, quantity: 1 });
     }
 
-    // Update cart count
-    const cartCountElement = document.getElementById('cart-count');
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    cartCountElement.textContent = totalItems;
-
-    // Trigger button animation
-    const button = document.querySelector(`.add-to-cart-btn[onclick="addToCart(${productId})"]`);
-    button.classList.add('pressed');
-    setTimeout(() => {
-        button.classList.remove('pressed');
-    }, 300);
+    // Update cart count and button state
+    updateCartCount();
 
     saveCartToStorage();
     renderCart();
@@ -469,19 +460,19 @@ function updateQuantity(productId, change) {
 function updateCartCount() {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     document.getElementById('cart-count').textContent = totalItems;
-    
-    // Enable/disable checkout button based on cart content and total
+
+    // Enable/disable checkout button based on cart content
     const checkoutBtn = document.getElementById('checkout-btn');
     const total = getCartTotal();
     checkoutBtn.disabled = cart.length === 0 || total < 0;
-    
+
     // Update button text if total is negative
     if (total < 0) {
         checkoutBtn.textContent = 'Cannot Checkout (Negative Total)';
         checkoutBtn.style.backgroundColor = '#ccc';
     } else {
         checkoutBtn.textContent = 'Checkout';
-        checkoutBtn.style.backgroundColor = '';
+        checkoutBtn.style.backgroundColor = ''; // Reset background color
     }
 }
 
