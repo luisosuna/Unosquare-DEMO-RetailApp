@@ -255,6 +255,10 @@ body {
     font-weight: bold;
 }
 
+.cart-count.updated {
+    animation: bounce 0.3s ease-in-out;
+}
+
 .logout-btn {
     background-color: rgba(255, 255, 255, 0.2);
     color: white;
@@ -377,6 +381,22 @@ body {
     border: 1px solid #ddd;
     border-radius: 5px;
     min-width: 150px;
+    font-size: 1rem;
+}
+
+#clear-filters-btn {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #6c757d; /* Grey */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#clear-filters-btn:hover {
+    background-color: #5a6268; /* Darker grey */
 }
 
 .inventory-container {
@@ -386,11 +406,14 @@ body {
 }
 
 .inventory-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s;
+    padding: 1rem;
+    height: 100%; /* Ensure consistent height */
 }
 
 .inventory-item:hover {
@@ -405,6 +428,10 @@ body {
 }
 
 .inventory-item-details {
+    flex-grow: 1; /* Push the button to the bottom */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 1.5rem;
 }
 
@@ -429,19 +456,37 @@ body {
 }
 
 .add-to-cart-btn {
-    width: 100%;
+    margin-top: auto; /* Align the button at the bottom */
+    padding: 0.5rem 1rem;
     background-color: #001f3f; /* Dark blue */
     color: white;
     border: none;
-    padding: 0.75rem;
     border-radius: 5px;
-    font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 .add-to-cart-btn:hover {
-    background-color: #000000; /* Black */
+    background-color: #0056b3; /* Lighter blue on hover */
+}
+
+.add-to-cart-btn.pressed {
+    animation: button-press 0.3s ease-in-out;
+}
+
+@keyframes button-press {
+    0% {
+        transform: scale(1);
+        background-color: #001f3f; /* Original color */
+    }
+    50% {
+        transform: scale(1.1);
+        background-color: #0056b3; /* Lighter blue */
+    }
+    100% {
+        transform: scale(1);
+        background-color: #001f3f; /* Original color */
+    }
 }
 
 .remove-btn {
@@ -561,6 +606,8 @@ body {
     min-width: 40px;
     text-align: center;
     font-weight: 500;
+    color: #000000; /* Black */
+    font-weight: bold; /* Optional: Make the text bold for better visibility */
 }
 
 .cart-footer {
@@ -876,13 +923,17 @@ body {
 }
 
 /* Animation for cart count */
-.cart-count.updated {
-    animation: bounce 0.3s ease-in-out;
+@keyframes bounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
 }
 
-@keyframes bounce {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2); }
+.cart-count.updated {
+    animation: bounce 0.3s ease-in-out;
 }
 
 /* Loading states */
