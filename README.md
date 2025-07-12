@@ -7,7 +7,7 @@ A complete e-commerce retail application built for testing purposes, inspired by
 1. Open `index.html` in a web browser or serve it via a local web server
 2. Log in with one of the test users:
    - **Username**: `unosquare_validUser`, `unosquare_problemUser`, `unosquare_performanceUser`, or `unosquare_errorUser`
-   - **Password**: `secret_sauce`
+   - **Password**: `secret_uno`
 
 ## 🏬 Features
 
