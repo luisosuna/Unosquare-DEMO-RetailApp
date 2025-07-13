@@ -988,3 +988,36 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Map styles */
+#address-map {
+    z-index: 1;
+}
+
+.map-search-btn {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+}
+
+#selected-coordinates {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+}
+
+#selected-coordinates small {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.leaflet-popup-content-wrapper {
+    background-color: #001f3f;
+    color: white;
+}
+
+.leaflet-popup-tip {
+    background-color: #001f3f;
+}

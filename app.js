@@ -370,6 +370,16 @@ function showCheckoutPage() {
         firstNameInput.value = '';
         lastNameInput.value = '';
     }
+    
+    // Initialize map after a short delay to ensure the container is visible
+    setTimeout(() => {
+        if (!map) {
+            initializeMap();
+        } else {
+            // If map already exists, invalidate size to handle container changes
+            map.invalidateSize();
+        }
+    }, 100);
 }
 
 function showOrderSummaryPage() {
@@ -597,11 +607,19 @@ function handleCheckoutSubmit(e) {
         firstName: formData.get('firstName'),
         lastName: formData.get('lastName'),
         zipCode: formData.get('zipCode'),
+        streetAddress: formData.get('streetAddress'),
+        city: formData.get('city'),
+        state: formData.get('state'),
         paymentType: formData.get('paymentType'),
         cardNumber: formData.get('cardNumber'),
         expiryDate: formData.get('expiryDate'),
         cvv: formData.get('cvv')
     };
+    
+    // Add coordinates if selected
+    if (selectedCoordinates) {
+        checkoutData.coordinates = selectedCoordinates;
+    }
     
     // Add email for guest users
     if (isGuestUser) {
@@ -694,8 +712,15 @@ function renderOrderSummary() {
     const shippingContainer = document.getElementById('summary-shipping');
     let shippingInfo = `
         <p><strong>Name:</strong> ${checkoutData.firstName} ${checkoutData.lastName}</p>
+        <p><strong>Address:</strong> ${checkoutData.streetAddress}</p>
+        <p><strong>City:</strong> ${checkoutData.city}, ${checkoutData.state}</p>
         <p><strong>Zip Code:</strong> ${checkoutData.zipCode}</p>
     `;
+    
+    // Add coordinates if available
+    if (checkoutData.coordinates) {
+        shippingInfo += `<p><strong>GPS Coordinates:</strong> ${checkoutData.coordinates.lat.toFixed(6)}, ${checkoutData.coordinates.lng.toFixed(6)}</p>`;
+    }
     
     // Add email for guest users
     if (isGuestUser && checkoutData.email) {
@@ -790,3 +815,113 @@ function simulateUserIssues() {
 
 // Run user simulation periodically
 setInterval(simulateUserIssues, 5000);
+
+// Map functionality
+let map = null;
+let selectedMarker = null;
+let selectedCoordinates = null;
+
+function initializeMap() {
+    // Initialize map centered on a default location (New York City)
+    map = L.map('address-map').setView([40.7128, -74.0060], 13);
+    
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    
+    // Add click handler for address selection
+    map.on('click', function(e) {
+        selectAddressOnMap(e.latlng.lat, e.latlng.lng);
+    });
+    
+    // Add search/geocoding functionality (basic implementation)
+    const searchButton = document.createElement('button');
+    searchButton.innerHTML = '<i class="fas fa-search"></i> Search Address';
+    searchButton.type = 'button';
+    searchButton.className = 'btn btn-secondary map-search-btn';
+    searchButton.style.marginTop = '10px';
+    searchButton.onclick = searchAddress;
+    
+    const mapContainer = document.getElementById('address-map');
+    mapContainer.parentNode.insertBefore(searchButton, mapContainer.nextSibling);
+}
+
+function selectAddressOnMap(lat, lng) {
+    // Remove previous marker if exists
+    if (selectedMarker) {
+        map.removeLayer(selectedMarker);
+    }
+    
+    // Add new marker
+    selectedMarker = L.marker([lat, lng]).addTo(map);
+    selectedMarker.bindPopup('Selected delivery address').openPopup();
+    
+    // Store coordinates
+    selectedCoordinates = { lat: lat, lng: lng };
+    
+    // Update UI
+    document.getElementById('selected-coordinates').style.display = 'block';
+    document.getElementById('coord-display').textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+    
+    // Reverse geocoding (basic implementation using Nominatim)
+    reverseGeocode(lat, lng);
+}
+
+function reverseGeocode(lat, lng) {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
+    
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.address) {
+                // Auto-fill address fields
+                const address = data.address;
+                const streetNumber = address.house_number || '';
+                const streetName = address.road || '';
+                const city = address.city || address.town || address.village || '';
+                const state = address.state || '';
+                
+                document.getElementById('street-address').value = `${streetNumber} ${streetName}`.trim();
+                document.getElementById('city').value = city;
+                document.getElementById('state').value = state;
+            }
+        })
+        .catch(error => {
+            console.warn('Reverse geocoding failed:', error);
+        });
+}
+
+function searchAddress() {
+    const streetAddress = document.getElementById('street-address').value;
+    const city = document.getElementById('city').value;
+    const state = document.getElementById('state').value;
+    
+    if (!streetAddress || !city) {
+        showError('Please enter at least a street address and city to search');
+        return;
+    }
+    
+    const query = `${streetAddress}, ${city}, ${state}`.trim();
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
+    
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.length > 0) {
+                const result = data[0];
+                const lat = parseFloat(result.lat);
+                const lng = parseFloat(result.lon);
+                
+                // Center map on found location
+                map.setView([lat, lng], 16);
+                selectAddressOnMap(lat, lng);
+            } else {
+                showError('Address not found. Please try a different address or select manually on the map.');
+            }
+        })
+        .catch(error => {
+            console.error('Geocoding failed:', error);
+            showError('Unable to search for address. Please select manually on the map.');
+        });
+}

@@ -6,6 +6,7 @@
     <title>Unosquare Sports Store</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <style>
         body {
             background-color: #001f3f; /* Dark blue */
@@ -165,6 +166,35 @@
                     </div>
 
                     <div class="form-section">
+                        <h3>Shipping Address</h3>
+                        <div class="form-group">
+                            <label for="street-address">Street Address:</label>
+                            <input type="text" id="street-address" name="streetAddress" required>
+                            <small>Enter your full street address</small>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City:</label>
+                                <input type="text" id="city" name="city" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State:</label>
+                                <input type="text" id="state" name="state" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Select Address on Map:</label>
+                            <div id="address-map" style="height: 300px; border: 1px solid #ddd; border-radius: 5px; margin-top: 10px;"></div>
+                            <small>Click on the map to select your delivery address</small>
+                        </div>
+                        <div class="form-group">
+                            <div id="selected-coordinates" style="display: none;">
+                                <small>Selected coordinates: <span id="coord-display">Not selected</span></small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
                         <h3>Payment Information</h3>
                         <div class="form-group">
                             <label for="payment-type">Payment Type:</label>
@@ -267,6 +297,7 @@
         </main>
     </div>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="app.js"></script>
 </body>
 </html>
