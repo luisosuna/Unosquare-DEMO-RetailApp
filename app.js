@@ -253,6 +253,15 @@ function handleLogout() {
 }
 
 function resetApp() {
+    // Trigger reset button animation
+    const resetButton = document.getElementById('reset-app');
+    if (resetButton) {
+        resetButton.classList.add('pressed');
+        setTimeout(() => {
+            resetButton.classList.remove('pressed');
+        }, 500); // Animation duration
+    }
+    
     cart = [];
     localStorage.removeItem('cart');
     updateCartCount();
@@ -409,7 +418,7 @@ function createProductElement(product) {
             <div class="inventory-item-name">${product.name}</div>
             <div class="inventory-item-desc">${product.description}</div>
             <div class="inventory-item-price">$${product.price.toFixed(2)}</div>
-            <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
+            <button class="add-to-cart-btn" onclick="addToCart(${product.id}, this)">
                 Add to cart
             </button>
         </div>
@@ -418,7 +427,7 @@ function createProductElement(product) {
 }
 
 // Cart management
-function addToCart(productId) {
+function addToCart(productId, buttonElement) {
     const product = products.find(p => p.id === productId);
     const cartItem = cart.find(item => item.id === productId);
 
@@ -426,6 +435,14 @@ function addToCart(productId) {
         cartItem.quantity += 1;
     } else {
         cart.push({ ...product, quantity: 1 });
+    }
+
+    // Trigger button animation
+    if (buttonElement && buttonElement.classList.contains('add-to-cart-btn')) {
+        buttonElement.classList.add('pressed');
+        setTimeout(() => {
+            buttonElement.classList.remove('pressed');
+        }, 300); // Animation duration
     }
 
     // Update cart count and button state
