@@ -489,6 +489,34 @@ body {
     }
 }
 
+/* Reset button animation */
+#reset-app.pressed {
+    animation: reset-press 0.5s ease-in-out;
+}
+
+@keyframes reset-press {
+    0% {
+        transform: scale(1) rotate(0deg);
+        color: white;
+    }
+    25% {
+        transform: scale(1.1) rotate(-5deg);
+        color: #ff6b6b;
+    }
+    50% {
+        transform: scale(1.2) rotate(5deg);
+        color: #feca57;
+    }
+    75% {
+        transform: scale(1.1) rotate(-2deg);
+        color: #48dbfb;
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        color: white;
+    }
+}
+
 .remove-btn {
     background-color: #ff0000; /* Red */
     color: white;
@@ -959,4 +987,37 @@ body {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Map styles */
+#address-map {
+    z-index: 1;
+}
+
+.map-search-btn {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+}
+
+#selected-coordinates {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+}
+
+#selected-coordinates small {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.leaflet-popup-content-wrapper {
+    background-color: #001f3f;
+    color: white;
+}
+
+.leaflet-popup-tip {
+    background-color: #001f3f;
 }
